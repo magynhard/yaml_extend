@@ -17,8 +17,10 @@ module YAML
   #
   # @param yaml_path [String] the path to the yaml file to be loaded
   # @param inheritance_key [String] the key used in the yaml file to extend from another YAML file
-  # @param extend_existing_arrays [Boolean] Extend existing arrays instead of replacing them
+  # @param extend_existing_arrays [Boolean] extend existing arrays instead of replacing them
   # @param config [Hash] a hash to be merged into the result, usually only recursivly called by the method itself
+  #
+  # @return [Hash] the resulting yaml config 
   #
   def self.ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true, config = {})
     total_config ||= {}
