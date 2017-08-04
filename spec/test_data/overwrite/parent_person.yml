@@ -1,0 +1,7 @@
+# encoding: utf-8
+---
+extends: "super_person.yml"
+data:
+  first_name: "Odin"
+  email: "odin@mail.com"
+  phone: "0747037126"

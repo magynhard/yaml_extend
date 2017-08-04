@@ -1,0 +1,7 @@
+# encoding: utf-8
+---
+data:
+  first_name: "Thor" 
+  email: "thor@mail.com"
+  password: "abc-+_893$ABCüÄ#"
+  phone: "0247037126"

@@ -1,0 +1,8 @@
+# encoding: utf-8
+---
+extends:
+  - "parent_person.yml"
+data:
+  email: "overwrite@mail.com"
+  password: "ow1234"
+  phone: "0123456789"

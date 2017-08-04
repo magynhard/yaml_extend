@@ -1,0 +1,4 @@
+# encoding: utf-8
+---
+super: "2nd.yml"
+third: "dummy"

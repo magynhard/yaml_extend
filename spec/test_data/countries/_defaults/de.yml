@@ -1,0 +1,10 @@
+# encoding: utf-8
+---
+extends: "global.yml"
+countries:
+  - "de"
+  - "at"
+  - "ch"
+  - "fr"
+  - "nl"
+  - "be"

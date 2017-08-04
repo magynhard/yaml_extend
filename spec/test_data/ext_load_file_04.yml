@@ -1,0 +1,4 @@
+# encoding: utf-8
+---
+extends: "other_directory/ext_load_file_03.yml"
+second: "bar"
