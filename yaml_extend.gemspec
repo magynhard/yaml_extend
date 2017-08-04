@@ -6,7 +6,7 @@ require 'yaml_extend/version'
 Gem::Specification.new do |spec|
   spec.name          = "yaml_extend"
   spec.version       = YamlExtend::VERSION
-  spec.authors       = ["Beyrle, Matth\xC3\xA4us"]
+  spec.authors       = ["Matth\xC3\xA4us Beyrle"]
   spec.email         = ["post@entwanderer.de"]
 
   spec.summary       = %q{Extends YAML to support file based inheritance}
