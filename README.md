@@ -36,7 +36,6 @@ This method works like the original YAML#load_file, by extending it with file in
 
 ### Examples
 
-
 ```
 # start.yml
 extends: 'super.yml'
@@ -56,8 +55,10 @@ data:
         - 'Bananas'
         - 'Apples'
 ```
-
+#### Basic Inheritance
+```
 YAML.ext_load_file('start.yml')
+```
 
 results in
 
