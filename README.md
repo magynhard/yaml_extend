@@ -10,6 +10,9 @@ default.yml   english.yml          default.yml   german.yml         de.yml
           uk.yml                            de.yml                  at.yml
 ```
 
+A file can inherit from as many as you want. Trees can be nested as deep as you want.
+The child file overwrites same values if given in the parent file.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -41,7 +44,7 @@ data:
     name: 'Mr. Superman'
     age: 134    
     favorites:
-        - "Raspberrys"
+        - 'Raspberrys'
 ```
 
 ```
@@ -50,8 +53,8 @@ data:
     name: 'Unknown'
     power: 2000
     favorites:
-        - "Bananas"
-        - "Apples"
+        - 'Bananas'
+        - 'Apples'
 ```
 
 YAML.ext_load_file('start.yml')
@@ -64,24 +67,27 @@ data:
     age: 134
     power: 2000
     favorites:
-        - "Bananas"
-        - "Apples"
-        - "Raspberrys"
+        - 'Bananas'
+        - 'Apples'
+        - 'Raspberrys'
 ```
 
-## Doc
+#### Inherit from several files
+
+```
+extends:
+    - 'super_file.yml'
+    - 'parent_file.yml'
+...
+```
+
+## Documentation
 YAML#ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true, config = {})
 
 - *yaml_path* relative or absolute path to yaml file to inherit from
 - *inheritance_key* you can overwrite the default key, if you use it already as part of your configuration. The inheritance_key is NOT included in the final merged file. Default: 'extends'
 - *extend_existing_arrays* Extends existing arrays in yaml structure instead of replacing them. Default: true
 - *config* only intended to be used by the method itself due recursive algorithm
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
