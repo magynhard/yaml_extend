@@ -7,17 +7,18 @@ require 'yaml'
 require 'deep_merge/rails_compat'
 
 #
-# Extending the YAML library to allow to inherit from another YAML files
+# Extending the YAML library to allow to inherit from another YAML file(s)
 #
 
 module YAML
   #
   # Extended variant of the #load_file method by providing the 
-  # ability to inherit from other YAML files.
+  # ability to inherit from other YAML file(s)
   #
   # @param yaml_path [String] the path to the yaml file to be loaded
   # @param inheritance_key [String] the key used in the yaml file to extend from another YAML file
-  # @param config [Hash] a hash to be merged into the result, usually recursivly called by the method itself
+  # @param extend_existing_arrays [Boolean] Extend existing arrays instead of replacing them
+  # @param config [Hash] a hash to be merged into the result, usually only recursivly called by the method itself
   #
   def self.ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true, config = {})
     total_config ||= {}
