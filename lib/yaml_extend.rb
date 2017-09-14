@@ -3,9 +3,6 @@ require "yaml_extend/version"
 require 'yaml'
 require 'deep_merge/rails_compat'
 
-require 'yaml'
-require 'deep_merge/rails_compat'
-
 #
 # Extending the YAML library to allow to inherit from another YAML file(s)
 #
