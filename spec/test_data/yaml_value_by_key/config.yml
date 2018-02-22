@@ -1,0 +1,12 @@
+# encoding: utf-8
+---
+options:
+  inherits_from: 'super.yml'
+  another_option: 'OPT'
+not_nested: "top_level"
+nest:
+  nested_key: "nested_value"
+nest2:
+  sub:
+    sub_sub:
+      very_nested_key: "very_nested_value"

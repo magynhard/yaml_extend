@@ -56,5 +56,76 @@ RSpec.describe YAML,'#ext_load_file' do
       expect(yaml_obj['data']['phone']).to eql('0123456789')
       expect(yaml_obj['data']['first_name']).to eql('Odin')
     end
+    it 'extends from custom nested (Array) key' do
+      yaml_obj = YAML.ext_load_file 'test_data/yaml_value_by_key/config.yml', ['options','inherits_from']
+      expect(yaml_obj['super']).to eql(true)
+    end
+    it 'has no custom extension key in the final merged yaml included (String)' do
+      yaml_obj = YAML.ext_load_file 'test_data/other_key.yml', 'inherits_from'
+      expect(yaml_obj['inherits_from']).to eql(nil)
+    end
+    it 'has no custom extension key in the final merged yaml included (Array)' do
+      yaml_obj = YAML.ext_load_file 'test_data/yaml_value_by_key/config.yml', ['options','inherits_from']
+      puts "EMPTY?"
+      p yaml_obj
+      expect(yaml_obj['options']['inherits_from']).to eql(nil)
+    end
+  end
+end
+
+RSpec.describe YAML,'#inheritance_yaml_by_key' do
+  context 'Check values from yaml extraction' do
+
+    config = YAML.ext_load_file 'test_data/yaml_value_by_key/config.yml'
+
+    it 'can extract a value from top level by String' do
+      value = YAML.send :yaml_value_by_key, 'not_nested', config
+      expect(value).to eql('top_level')
+    end
+    it 'can extract a value from top level by Array' do
+      value = YAML.send :yaml_value_by_key, ['not_nested'], config
+      expect(value).to eql('top_level')
+    end
+    it 'can extract a value from second level by Array' do
+      value = YAML.send :yaml_value_by_key, ['nest','nested_key'], config
+      expect(value).to eql('nested_value')
+    end
+    it 'can extract a value from deep level by Array' do
+      value = YAML.send :yaml_value_by_key, ['nest2','sub','sub_sub','very_nested_key'], config
+      expect(value).to eql('very_nested_value')
+    end
+    it 'can not extract value from an inexisting, nested key deep leveled in Array' do
+      value = YAML.send :yaml_value_by_key, ['nest7','sub4','sub_sub3','very_nested_key1'], config
+      expect(value).to eql(nil)
+    end
+    it 'can not read from key of type integer' do
+      expect { YAML.send :yaml_value_by_key, 123, config }.to raise_error(InvalidKeyTypeError)
+    end
+    it 'can not read from key of type integer in Array' do
+      expect { YAML.send :yaml_value_by_key, [1], config }.to raise_error(InvalidKeyTypeError)
+    end
+    it 'can not read from key of type integer in nested Array' do
+      expect { YAML.send :yaml_value_by_key, ["nest",1], config }.to raise_error(InvalidKeyTypeError)
+    end
+  end
+end
+
+RSpec.describe YAML,'#delete_yaml_key' do
+  context 'Verify correct deletion of yaml key' do
+    it 'deletes a key (String)' do
+      yaml_obj = YAML.ext_load_file 'test_data/yaml_value_by_key/config.yml', ['options','inherits_from']
+      value = YAML.send :delete_yaml_key, 'nest2', yaml_obj
+      expect(yaml_obj['nest2']).to eql(nil)
+    end
+    it 'deletes a nested key (Array)' do
+      yaml_obj = YAML.ext_load_file 'test_data/yaml_value_by_key/config.yml', ['options','inherits_from']
+      value = YAML.send :delete_yaml_key, ['nest','nested_key'], yaml_obj
+      expect(yaml_obj['nest']['nested_key']).to eql(nil)
+      expect(yaml_obj['nest']).not_to eql(nil)
+    end
+    it 'does not delete other keys on the level of a nested key (Array)' do
+      yaml_obj = YAML.ext_load_file 'test_data/yaml_value_by_key/config.yml', ['options','inherits_from']
+      expect(yaml_obj['options']['another_option']).to eql('OPT')
+    end
   end
 end

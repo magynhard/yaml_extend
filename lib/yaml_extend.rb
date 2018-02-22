@@ -1,7 +1,9 @@
-require "yaml_extend/version"
+require 'yaml_extend/version'
 
 require 'yaml'
 require 'deep_merge/rails_compat'
+
+require_relative 'custom_errors/invalid_key_type_error'
 
 #
 # Extending the YAML library to allow to inherit from another YAML file(s)
@@ -13,7 +15,9 @@ module YAML
   # ability to inherit from other YAML file(s)
   #
   # @param yaml_path [String] the path to the yaml file to be loaded
-  # @param inheritance_key [String] the key used in the yaml file to extend from another YAML file
+  # @param inheritance_key [String|Array]
+  #   The key used in the yaml file to extend from another YAML file.
+  #   Use an Array if you want to use a tree structure key like "options.extends" => ['options','extends']
   # @param extend_existing_arrays [Boolean] extend existing arrays instead of replacing them
   # @param config [Hash] a hash to be merged into the result, usually only recursivly called by the method itself
   #
@@ -23,8 +27,8 @@ module YAML
     total_config ||= {}
     yaml_path = YAML.make_absolute_path yaml_path
     super_config = YAML.load_file(File.open(yaml_path))
-    super_inheritance_files = super_config[inheritance_key]
-    super_config.delete inheritance_key # we don't merge the super inheritance keys into the base yaml
+    super_inheritance_files = yaml_value_by_key inheritance_key, super_config
+    delete_yaml_key inheritance_key, super_config # we don't merge the super inheritance keys into the base yaml
     merged_config = config.clone.deeper_merge(super_config, extend_existing_arrays: extend_existing_arrays)
     if super_inheritance_files && super_inheritance_files != ''
       super_inheritance_files = [super_inheritance_files] unless super_inheritance_files.is_a? Array # we support strings as well as arrays of type string to extend from
@@ -34,7 +38,7 @@ module YAML
       end
       total_config
     else
-      merged_config.delete(inheritance_key)
+      delete_yaml_key inheritance_key, merged_config
       merged_config
     end
   end
@@ -62,4 +66,40 @@ module YAML
     path.start_with?('/') || # unix like
       (path.length >= 3 && path[1] == ':') # ms windows
   end
+
+  # Return the value of the corresponding key
+  # @param key [String|Array]
+  def self.yaml_value_by_key(key, config)
+    return config[key] if key.is_a? String
+    if valid_key_type? key
+      cfg_copy = config.clone
+      key.each do |key|
+        if cfg_copy.nil?
+          return
+        elsif valid_key_type? key
+          cfg_copy = cfg_copy[key]
+        end
+      end
+      cfg_copy
+    end
+  end
+
+  def self.valid_key_type?(key)
+    key.is_a?(Array) || key.is_a?(String) ||
+        raise(InvalidKeyTypeError,"Invalid key of type '#{key.class.name}'. Valid types are String and Array.")
+  end
+
+  def self.delete_yaml_key(key, config)
+    return config.delete(key) if key.is_a? String
+    cfg_ref = config
+    last_ref = nil
+    key.each do |key|
+      if valid_key_type?(key) && !cfg_ref[key].nil?
+        last_ref = cfg_ref
+        cfg_ref = cfg_ref[key] unless cfg_ref.nil?
+      end
+    end
+    last_ref.delete key.last unless last_ref.nil?
+  end
+
 end
