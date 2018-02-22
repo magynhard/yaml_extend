@@ -15,9 +15,7 @@ module YAML
   # ability to inherit from other YAML file(s)
   #
   # @param yaml_path [String] the path to the yaml file to be loaded
-  # @param inheritance_key [String|Array]
-  #   The key used in the yaml file to extend from another YAML file.
-  #   Use an Array if you want to use a tree structure key like "options.extends" => ['options','extends']
+  # @param inheritance_key [String|Array] The key used in the yaml file to extend from another YAML file. Use an Array if you want to use a tree structure key like "options.extends" => ['options','extends']
   # @param extend_existing_arrays [Boolean] extend existing arrays instead of replacing them
   # @param config [Hash] a hash to be merged into the result, usually only recursivly called by the method itself
   #
