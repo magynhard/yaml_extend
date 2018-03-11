@@ -3,16 +3,6 @@
 Extends YAML to support file based inheritance,
 to e.g. to build a configuration hierachy.
 
-It is possible to build inheritance trees like
-```
-default.yml   english.yml          default.yml   german.yml         de.yml
-         \    /                             \    /                    |
-          uk.yml                            de.yml                  at.yml
-```
-
-A file can inherit from as many as you want. Trees can be nested as deep as you want.
-The child file overwrites same values if given in the parent file.
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -28,6 +18,24 @@ And then execute:
 Or install it yourself as:
 
     $ gem install yaml_extend
+    
+## Common information
+
+It is possible to build inheritance trees like
+```
+default.yml   english.yml          default.yml   german.yml         de.yml
+         \    /                             \    /                    |
+          uk.yml                            de.yml                  at.yml
+```
+
+A file can inherit from as many as you want. Trees can be nested as deep as you want.
+
+YAML files are deep merged, the latest specified child file overwrites the former ones.
+Array values are merged as well by default. You can specifiy this with the 3rd Parameter.
+
+The files to inherit from are specified by the key 'extends:' in the YAML file.
+That key can be customized if you prefer another one.
+See the examples below.
 
 ## Usage
 yaml_extend adds the method YAML#ext_load_file to YAML.
@@ -36,7 +44,10 @@ This method works like the original YAML#load_file, by extending it with file in
 
 ### Examples
 
-```
+#### Basic Inheritance
+Given the following both files are defined:
+
+```yaml
 # start.yml
 extends: 'super.yml'
 data:
@@ -46,7 +57,7 @@ data:
         - 'Raspberrys'
 ```
 
-```
+```yaml
 # super.yml
 data:
     name: 'Unknown'
@@ -55,14 +66,16 @@ data:
         - 'Bananas'
         - 'Apples'
 ```
-#### Basic Inheritance
-```
-YAML.ext_load_file('start.yml')
+
+When you then call #ext_load_file
+
+```ruby
+YAML.ext_load_file 'start.yml'
 ```
 
-results in
+the returned YAML value results in
 
-```
+```yaml
 data:
     name: 'Mr. Superman'
     age: 134
@@ -75,7 +88,10 @@ data:
 
 #### Inherit from several files
 
-```
+If you want to inherit from several files, you can specify a list (Array) of files.
+They are merged from top to bottom, so the latest file "wins" - that means it overwrites duplicate values if they exist with the values in the latest file where they occur.
+
+```yaml
 extends:
     - 'super_file.yml'
     - 'parent_file.yml'
@@ -83,19 +99,36 @@ extends:
 ```
 
 #### Using custom extend key
-```
+
+If you don't want to use the default key 'extends:', you can specify your own custom key in two ways.
+
+```yaml
 #custom1.yml
 inherit_from:
     - 'super_file.yml'
 foo: 'bar'
 ...
 ```
-
+##### 1. Specify by parameter
+You can specify the key by parameter, this is the way to go if you want to  use the different key only once or you use the #ext_load_file method only once in your application.
+```ruby
+YAML.ext_load_file 'custom1.yml', 'inherit_from'
 ```
-YAML.ext_load_file('custom1.yml','inherit_from')
+##### 2. Global configuration of the key
+You can specify the key by configuration globally. So you only need to set the key once and not as parameter anymore
+```ruby
+YAML.ext_load_key = 'inherit_from'
+YAML.ext_load_file 'custom1.yml'
+YAML.ext_load_file 'custom2.yml'
+```
+##### Reset the global key
+To reset the global inheritance key, you can either set it to nil or call the #reset_load_key  method.
+```ruby
+YAML.reset_load_key # more readable
+YAML.ext_load_key = nil # more explicit
 ```
 #### Using custom nested extend key
-```
+```yaml
 #custom2.yml
 options:
     extend_file: 'super_file.yml'
@@ -104,8 +137,8 @@ foo: 'bar'
 ...
 ```
 
-```
-YAML.ext_load_file('custom2.yml',['options','extend_file'])
+```ruby
+YAML.ext_load_file 'custom2.yml', ['options','extend_file']
 ```
 
 ## Documentation

@@ -10,6 +10,28 @@ require_relative 'custom_errors/invalid_key_type_error'
 #
 
 module YAML
+  # default path in the yaml file where the files to inherit from are defined
+  DEFAULT_INHERITANCE_KEY = 'extends'
+  @@ext_load_key = nil
+  #
+  # Set a custom inheritance key globally once.
+  # So you don't need to specify it on every call of ext_load_file()
+  #
+  # @param key [String|Array<String>|nil] the key in the yaml file, containing the file strings to extend from. Set nil or call #reset_load_key to reset the key.
+  def self.ext_load_key=(key)
+    if key.is_a?(String) || key.is_a?(Array) || key.nil?
+      @@ext_load_key = key
+    else
+      raise "Parameter 'key' must be of type String or Array<String> or nil"
+    end
+  end
+
+  #
+  # Reset the ext_load_key and use the default settings
+  #
+  def self.reset_load_key()
+    @@ext_load_key = nil
+  end
   #
   # Extended variant of the #load_file method by providing the 
   # ability to inherit from other YAML file(s)
@@ -21,7 +43,10 @@ module YAML
   #
   # @return [Hash] the resulting yaml config 
   #
-  def self.ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true, config = {})
+  def self.ext_load_file(yaml_path, inheritance_key=nil, extend_existing_arrays=true, config = {})
+    if inheritance_key.nil?
+      inheritance_key = @@ext_load_key || DEFAULT_INHERITANCE_KEY
+    end
     total_config ||= {}
     yaml_path = YAML.make_absolute_path yaml_path
     super_config = YAML.load_file(File.open(yaml_path))

@@ -129,3 +129,33 @@ RSpec.describe YAML,'#delete_yaml_key' do
     end
   end
 end
+
+RSpec.describe YAML,'#ext_load_key=' do
+  context 'Set the inheritance key globally' do
+    it 'check if key persists through several loadings' do
+      YAML.ext_load_key = ['options','inherits_from']
+      yaml_obj = YAML.ext_load_file 'test_data/load_ext_key/config1.yml'
+      expect(yaml_obj['super']).to eql('super1')
+      yaml_obj = YAML.ext_load_file 'test_data/load_ext_key/config2.yml'
+      expect(yaml_obj['super']).to eql('super2')
+    end
+    it 'can reset the load key by reset method' do
+      YAML.ext_load_key = ['options','inherits_from']
+      yaml_obj = YAML.ext_load_file 'test_data/load_ext_key/config1.yml'
+      expect(yaml_obj['super']).to eql('super1')
+      YAML.reset_load_key
+      yaml_obj = YAML.ext_load_file 'test_data/load_ext_key/config2.yml'
+      expect(yaml_obj['super']).to eql(nil)
+    end
+    it "can reset the load key by explicit key value 'nil'" do
+      YAML.ext_load_key = ['options','inherits_from']
+      yaml_obj = YAML.ext_load_file 'test_data/load_ext_key/config1.yml'
+      expect(yaml_obj['super']).to eql('super1')
+      YAML.ext_load_key = nil
+      yaml_obj = YAML.ext_load_file 'test_data/load_ext_key/config2.yml'
+      expect(yaml_obj['super']).to eql(nil)
+    end
+    # reset key
+    YAML.reset_load_key
+  end
+end

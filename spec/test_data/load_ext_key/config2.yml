@@ -1,0 +1,8 @@
+# encoding: utf-8
+---
+options:
+  inherits_from: 'super2.yml'
+  another_option: 'OPT'
+not_nested: "top_level"
+nest:
+  nested_key: "nested_value"
