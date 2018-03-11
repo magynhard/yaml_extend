@@ -1,7 +1,8 @@
 # yaml_extend
 
-Extends YAML to support file based inheritance,
-to e.g. to build a configuration hierachy.
+Extends YAML to support file based inheritance.
+
+That can be very handy to build a configuration hierachy.
 
 ## Installation
 
