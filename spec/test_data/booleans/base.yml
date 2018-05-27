@@ -1,0 +1,7 @@
+alpha: true
+beta: false
+gamma: true
+data:
+  delta: false
+  kappa: true
+  theta: false

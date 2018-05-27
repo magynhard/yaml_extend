@@ -3,6 +3,8 @@ require 'yaml_extend/version'
 require 'yaml'
 require 'deep_merge/rails_compat'
 
+require_relative 'yaml_extend/yaml_extend_helper'
+
 require_relative 'custom_errors/invalid_key_type_error'
 
 #
@@ -49,7 +51,7 @@ module YAML
     end
     total_config ||= {}
     yaml_path = YAML.make_absolute_path yaml_path
-    super_config = YAML.load_file(File.open(yaml_path))
+    super_config = YamlExtendHelper.encode_booleans YAML.load_file(File.open(yaml_path))
     super_inheritance_files = yaml_value_by_key inheritance_key, super_config
     delete_yaml_key inheritance_key, super_config # we don't merge the super inheritance keys into the base yaml
     merged_config = config.clone.deeper_merge(super_config, extend_existing_arrays: extend_existing_arrays)
@@ -57,12 +59,12 @@ module YAML
       super_inheritance_files = [super_inheritance_files] unless super_inheritance_files.is_a? Array # we support strings as well as arrays of type string to extend from
       super_inheritance_files.each_with_index do |super_inheritance_file, index|
         super_config_path = File.dirname(yaml_path) + '/' + super_inheritance_file
-        total_config = YAML.ext_load_file super_config_path, inheritance_key, extend_existing_arrays, total_config.deeper_merge(merged_config, extend_existing_arrays: extend_existing_arrays)
+        total_config = YamlExtendHelper.encode_booleans YAML.ext_load_file(super_config_path, inheritance_key, extend_existing_arrays, total_config.deeper_merge(merged_config, extend_existing_arrays: extend_existing_arrays))
       end
-      total_config
+      YamlExtendHelper.decode_booleans total_config
     else
       delete_yaml_key inheritance_key, merged_config
-      merged_config
+      YamlExtendHelper.decode_booleans merged_config
     end
   end
 
