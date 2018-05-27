@@ -74,6 +74,12 @@ RSpec.describe YAML,'#ext_load_file' do
       expect(yaml_obj['data']['theta']).to eql(false)
       expect(yaml_obj['data']['delta']).to eql(true)
     end
+    it 'can extend and overwrite string booleans' do
+      yaml_obj = YAML.ext_load_file 'test_data/booleans/extended.yml'
+      expect(yaml_obj['string_data']['kappa']).to eql('false')
+      expect(yaml_obj['string_data']['theta']).to eql('false')
+      expect(yaml_obj['string_data']['delta']).to eql('true')
+    end
   end
 end
 

@@ -5,3 +5,7 @@ data:
   delta: false
   kappa: true
   theta: false
+string_data:
+  delta: 'false'
+  kappa: 'true'
+  theta: 'false'
