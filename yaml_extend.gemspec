@@ -6,11 +6,11 @@ require 'yaml_extend/version'
 Gem::Specification.new do |spec|
   spec.name          = "yaml_extend"
   spec.version       = YamlExtend::VERSION
-  spec.authors       = ["Matth\xC3\xA4us Beyrle"]
-  spec.email         = ["post@entwanderer.de"]
+  spec.authors       = ["Matthäus Beyrle"]
+  spec.email         = ["yaml_extend.gemspec@mail.magynhard.de"]
 
   spec.summary       = %q{Extends YAML to support file based inheritance}
-  spec.homepage      = "https://github.com/entwanderer/yaml_extend"
+  spec.homepage      = "https://github.com/magynhard/yaml_extend"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
