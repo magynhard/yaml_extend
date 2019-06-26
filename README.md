@@ -22,11 +22,20 @@ Or install it yourself as:
     
 ## Common information
 
-It is possible to build inheritance trees like
+It is possible to build inheritance trees like:
 ```
-default.yml   english.yml          default.yml   german.yml         de.yml
-         \    /                             \    /                    |
-          uk.yml                            de.yml                  at.yml
+     defaults.yml   
+  ________\_________    
+  \        \        \                         
+ dev.yml  int.yml  prod.yml                   
+```
+or like this:
+```
+default.yml   english.yml          default.yml   german.yml       
+         \    /                             \    /                
+          uk.yml                            de.yml
+                                              |
+                                            at.yml
 ```
 
 A file can inherit from as many as you want. Trees can be nested as deep as you want.
@@ -71,7 +80,7 @@ data:
 When you then call #ext_load_file
 
 ```ruby
-YAML.ext_load_file 'start.yml'
+config = YAML.ext_load_file 'start.yml'
 ```
 
 the returned YAML value results in
@@ -113,14 +122,13 @@ foo: 'bar'
 ##### 1. Specify by parameter
 You can specify the key by parameter, this is the way to go if you want to  use the different key only once or you use the #ext_load_file method only once in your application.
 ```ruby
-YAML.ext_load_file 'custom1.yml', 'inherit_from'
+config = YAML.ext_load_file 'custom1.yml', 'inherit_from'
 ```
 ##### 2. Global configuration of the key
 You can specify the key by configuration globally. So you only need to set the key once and not as parameter anymore
 ```ruby
 YAML.ext_load_key = 'inherit_from'
-YAML.ext_load_file 'custom1.yml'
-YAML.ext_load_file 'custom2.yml'
+config = YAML.ext_load_file 'custom1.yml'
 ```
 ##### Reset the global key
 To reset the global inheritance key, you can either set it to nil or call the #reset_load_key  method.
@@ -139,7 +147,7 @@ foo: 'bar'
 ```
 
 ```ruby
-YAML.ext_load_file 'custom2.yml', ['options','extend_file']
+config = YAML.ext_load_file 'custom2.yml', ['options','extend_file']
 ```
 
 ## Documentation
