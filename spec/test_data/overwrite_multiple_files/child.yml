@@ -1,0 +1,8 @@
+extends: 
+  - parent_L2_A.yml
+  - parent_L2_B.yml
+  - parent_L2_C.yml
+
+overwritten_until_child: child value
+
+own_child: child value
