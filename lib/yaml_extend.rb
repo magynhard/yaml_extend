@@ -34,6 +34,7 @@ module YAML
   def self.reset_load_key()
     @@ext_load_key = nil
   end
+
   #
   # Extended variant of the #load_file method by providing the 
   # ability to inherit from other YAML file(s)
@@ -41,11 +42,19 @@ module YAML
   # @param yaml_path [String] the path to the yaml file to be loaded
   # @param inheritance_key [String|Array] The key used in the yaml file to extend from another YAML file. Use an Array if you want to use a tree structure key like "options.extends" => ['options','extends']
   # @param extend_existing_arrays [Boolean] extend existing arrays instead of replacing them
-  # @param config [Hash] a hash to be merged into the result, usually only recursivly called by the method itself
-  #
   # @return [Hash] the resulting yaml config 
   #
-  def self.ext_load_file(yaml_path, inheritance_key=nil, extend_existing_arrays=true, config = {})
+  def self.ext_load_file(yaml_path, inheritance_key=nil, extend_existing_arrays=true)
+    YAML.ext_load_file_recursive(yaml_path, inheritance_key, extend_existing_arrays, {})
+  end
+
+  private
+
+  #
+  # @param config [Hash] a hash to be merged into the result, usually only recursivly called by the method itself
+  #
+  def self.ext_load_file_recursive(yaml_path, inheritance_key, extend_existing_arrays, config)
+    private_class_method
     if inheritance_key.nil?
       inheritance_key = @@ext_load_key || DEFAULT_INHERITANCE_KEY
     end
@@ -61,23 +70,25 @@ module YAML
       super_inheritance_files = [super_inheritance_files] unless super_inheritance_files.is_a? Array # we support strings as well as arrays of type string to extend from
       super_inheritance_files.each_with_index do |super_inheritance_file, index|
         super_config_path = File.dirname(yaml_path) + '/' + super_inheritance_file
-        total_config = YamlExtendHelper.encode_booleans YAML.ext_load_file(super_config_path, inheritance_key, extend_existing_arrays, total_config)
+        total_config = YamlExtendHelper.encode_booleans YAML.ext_load_file_recursive(super_config_path, inheritance_key, extend_existing_arrays, total_config)
       end
     end
     total_config = total_config.deeper_merge!(super_config, extend_existing_arrays: extend_existing_arrays)    
     YamlExtendHelper.decode_booleans total_config
   end
 
-  private
-
   # some logic to ensure absolute file inheritance as well as 
   # relative file inheritance in yaml files  
   def self.make_absolute_path(file_path)
     private_class_method
     return file_path if YAML.absolute_path?(file_path) && File.exist?(file_path)
-    base_path = File.dirname(caller_locations[1].path)
+    # caller_locations returns the current execution stack
+    #   [0] is the call from ext_load_file_recursive,
+    #   [1] is inside ext_load_file,
+    #   [2] is the exteranl caller of YAML.ext_load_file
+    base_path = File.dirname(caller_locations[2].path)
     return base_path + '/' + file_path if File.exist? base_path + '/' + file_path # relative path from yaml file
-    return Dir.pwd + '/' + file_path if File.exist? Dir.pwd + '/' + file_path # relative path from project
+    return Dir.pwd + '/' + file_path if File.exist? Dir.pwd + '/' + file_path     # relative path from project
     error_message = "Can not find absolute path of '#{file_path}'"
     unless YAML.absolute_path? file_path
       error_message += "\nAlso tried:\n- #{base_path + '/' + file_path}\n"\
