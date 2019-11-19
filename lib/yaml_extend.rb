@@ -36,7 +36,7 @@ module YAML
   end
 
   #
-  # Extended variant of the #load_file method by providing the 
+  # Extended variant of the YAML.load_file method by providing the
   # ability to inherit from other YAML file(s)
   #
   # @param yaml_path [String] the path to the yaml file to be loaded

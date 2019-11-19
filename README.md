@@ -48,9 +48,9 @@ That key can be customized if you prefer another one.
 See the examples below.
 
 ## Usage
-yaml_extend adds the method YAML#ext_load_file to YAML.
+yaml_extend adds the method YAML.ext_load_file to YAML.
 
-This method works like the original YAML#load_file, by extending it with file inheritance.
+This method works like the original YAML.load_file, by extending it with file inheritance.
 
 ### Examples
 
@@ -77,7 +77,7 @@ data:
         - 'Apples'
 ```
 
-When you then call #ext_load_file
+When you then call `ext_load_file`
 
 ```ruby
 config = YAML.ext_load_file 'start.yml'
@@ -120,7 +120,7 @@ foo: 'bar'
 ...
 ```
 ##### 1. Specify by parameter
-You can specify the key by parameter, this is the way to go if you want to  use the different key only once or you use the #ext_load_file method only once in your application.
+You can specify the key by parameter, this is the way to go if you want to  use the different key only once or you use the `ext_load_file` method only once in your application.
 ```ruby
 config = YAML.ext_load_file 'custom1.yml', 'inherit_from'
 ```
@@ -131,7 +131,7 @@ YAML.ext_load_key = 'inherit_from'
 config = YAML.ext_load_file 'custom1.yml'
 ```
 ##### Reset the global key
-To reset the global inheritance key, you can either set it to nil or call the #reset_load_key  method.
+To reset the global inheritance key, you can either set it to nil or call the `reset_load_key`  method.
 ```ruby
 YAML.reset_load_key # more readable
 YAML.ext_load_key = nil # more explicit
@@ -151,12 +151,11 @@ config = YAML.ext_load_file 'custom2.yml', ['options','extend_file']
 ```
 
 ## Documentation
-YAML#ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true, config = {})
+YAML.ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true)
 
 - *yaml_path* relative or absolute path to yaml file to inherit from
 - *inheritance_key* you can overwrite the default key, if you use the default 'extends' already as part of your configuration. The inheritance_key is NOT included, that means it will be deleted, in the final merged file. Default: 'extends'
 - *extend_existing_arrays* Extends existing arrays in yaml structure instead of replacing them. Default: true
-- *config* only intended to be used by the method itself due recursive algorithm
 
 ## Contributing
 
