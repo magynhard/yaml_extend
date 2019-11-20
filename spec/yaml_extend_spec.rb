@@ -8,6 +8,23 @@ end
 
 RSpec.describe YAML,'#ext_load_file' do
   context 'Test inheritance feature' do
+
+    it 'locale overwrite' do
+      yaml_obj = YAML.ext_load_file 'test_data/overwrite_multiple_files/child.yml'
+
+      expect(yaml_obj['own_parent_L1_A']).to eql('parent L1 A value')
+      expect(yaml_obj['overwritten_until_L1_B']).to eql('parent L1 B value')
+      expect(yaml_obj['own_parent_L1_B']).to eql('parent L1 B value')
+      expect(yaml_obj['overwritten_until_L2_A']).to eql('parent L2 A value')
+      expect(yaml_obj['own_parent_L2_A']).to eql('parent L2 A value')
+      expect(yaml_obj['overwritten_until_L2_B']).to eql('parent L2 B value')
+      expect(yaml_obj['own_parent_L2_B']).to eql('parent L2 B value')
+      expect(yaml_obj['overwritten_until_L2_C']).to eql('parent L2 C value')
+      expect(yaml_obj['own_parent_L2_C']).to eql('parent L2 C value')
+      expect(yaml_obj['overwritten_until_child']).to eql('child value')
+      expect(yaml_obj['own_child']).to eql('child value')
+    end
+
     it 'extends with another yaml file' do
       yaml_obj = YAML.ext_load_file 'test_data/ext_load_file_02.yml'
       expect(yaml_obj).to include('first')
