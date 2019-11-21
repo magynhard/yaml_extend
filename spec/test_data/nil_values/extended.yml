@@ -1,0 +1,7 @@
+extends: 
+  - base.yml
+
+overwritten_nil: string value
+not_overwritten_string: null
+overwritten_false: null
+not_overwritten_true: null
