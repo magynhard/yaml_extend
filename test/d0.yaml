@@ -1,0 +1,7 @@
+extends:
+- a1.yaml
+- b1.yaml
+- c1.yaml
+files:
+- d0
+value: 20

@@ -1,0 +1,4 @@
+extends: d0.yaml
+files:
+- d1
+value: 30

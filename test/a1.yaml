@@ -1,0 +1,4 @@
+extends: a0.yaml
+files:
+- a1
+value: 10

@@ -19,20 +19,20 @@ And then execute:
 Or install it yourself as:
 
     $ gem install yaml_extend
-    
+
 ## Common information
 
 It is possible to build inheritance trees like:
 ```
-     defaults.yml   
-  ________\_________    
-  \        \        \                         
- dev.yml  int.yml  prod.yml                   
+     defaults.yml
+  ________\_________
+  \        \        \
+ dev.yml  int.yml  prod.yml
 ```
 or like this:
 ```
-default.yml   english.yml          default.yml   german.yml       
-         \    /                             \    /                
+default.yml   english.yml          default.yml   german.yml
+         \    /                             \    /
           uk.yml                            de.yml
                                               |
                                             at.yml
@@ -40,7 +40,9 @@ default.yml   english.yml          default.yml   german.yml
 
 A file can inherit from as many as you want. Trees can be nested as deep as you want.
 
-YAML files are deep merged, the latest specified child file overwrites the former ones.
+YAML files are deep merged. Two methods are supported:
+- :breadthfirst: the latest specified child file overwrites the former ones, uses deep_merge
+- :postorder   : the tree is traversed in a postorder fashion, where the newer node gets merged into the existing merge, uses deep_merge!
 Array values are merged as well by default. You can specifiy this with the 3rd Parameter.
 
 The files to inherit from are specified by the key 'extends:' in the YAML file.
@@ -62,7 +64,7 @@ Given the following both files are defined:
 extends: 'super.yml'
 data:
     name: 'Mr. Superman'
-    age: 134    
+    age: 134
     favorites:
         - 'Raspberrys'
 ```
@@ -151,12 +153,13 @@ config = YAML.ext_load_file 'custom2.yml', ['options','extend_file']
 ```
 
 ## Documentation
-YAML#ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true, config = {})
+YAML#ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true, config = {}, tree_traversal: :breadthfirst))
 
 - *yaml_path* relative or absolute path to yaml file to inherit from
 - *inheritance_key* you can overwrite the default key, if you use the default 'extends' already as part of your configuration. The inheritance_key is NOT included, that means it will be deleted, in the final merged file. Default: 'extends'
 - *extend_existing_arrays* Extends existing arrays in yaml structure instead of replacing them. Default: true
 - *config* only intended to be used by the method itself due recursive algorithm
+- *tree_traversal* :breadthfirst or :postorder. Default: :breadthfirst
 
 ## Contributing
 

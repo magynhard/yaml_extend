@@ -1,0 +1,4 @@
+extends: b0.yaml
+files:
+- b1
+value: 11

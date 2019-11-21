@@ -1,0 +1,4 @@
+extends: c0.yaml
+files:
+- c1
+value: 12
