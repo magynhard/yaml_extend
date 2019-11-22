@@ -75,7 +75,7 @@ module YAML
         super_inheritance_files = [super_inheritance_files] unless super_inheritance_files.is_a? Array # we support strings as well as arrays of type string to extend from
         super_inheritance_files.each_with_index do |super_inheritance_file, index|
           super_config_path = File.dirname(yaml_path) + '/' + super_inheritance_file
-          total_config = YamlExtendHelper.encode_booleans YAML.ext_load_file(super_config_path, inheritance_key, extend_existing_arrays, total_config.deeper_merge(merged_config, extend_existing_arrays: extend_existing_arrays), load_order_super2derived: load_order_super2derived)
+          total_config = YamlExtendHelper.encode_booleans YAML.ext_load_file(super_config_path, inheritance_key, extend_existing_arrays, total_config.deeper_merge(merged_config, extend_existing_arrays: extend_existing_arrays))
         end
         YamlExtendHelper.decode_booleans total_config
       else
