@@ -56,7 +56,7 @@ module YAML
     # the original code probably could also easily fit in this scheme now, but I did not want to touch the original code
     if tree_traversal==:postorder
       tree, f = build_tree yaml_path, inheritance_key
-      files << f
+      files.push(*f)
       tree.postordered_each do |node|
         merged_children_config={}
         node.children.concat([node]).each do |child|
