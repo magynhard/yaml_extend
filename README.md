@@ -153,12 +153,13 @@ config = YAML.ext_load_file 'custom2.yml', ['options','extend_file']
 ```
 
 ## Documentation
-YAML#ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true, config = {}, tree_traversal: :breadthfirst))
+YAML#ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true, config = {}, files: [], tree_traversal: :breadthfirst))
 
 - *yaml_path* relative or absolute path to yaml file to inherit from
 - *inheritance_key* you can overwrite the default key, if you use the default 'extends' already as part of your configuration. The inheritance_key is NOT included, that means it will be deleted, in the final merged file. Default: 'extends'
 - *extend_existing_arrays* Extends existing arrays in yaml structure instead of replacing them. Default: true
 - *config* only intended to be used by the method itself due recursive algorithm
+- *files* encountered files will be appended to this list
 - *tree_traversal* :breadthfirst or :postorder. Default: :breadthfirst
 
 ## Contributing
