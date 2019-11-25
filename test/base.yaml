@@ -1,0 +1,8 @@
+# base.yaml
+---
+blockX:
+- playground:
+    macros:
+      M_BASE: ja
+      M_REPLACE: to_be_replaced
+...

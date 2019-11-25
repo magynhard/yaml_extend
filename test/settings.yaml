@@ -1,0 +1,10 @@
+# settings.yaml
+---
+extends:
+  - 'base.yaml'
+blockX:
+- playground:
+    macros:
+      M_DERIVE: ja
+      M_REPLACE: replaced
+...

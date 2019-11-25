@@ -44,17 +44,19 @@ module YAML
   # @param extend_existing_arrays [Boolean] extend existing arrays instead of replacing them
   # @param tree_traversal [:breadthfirst,:postorder] merge order sequence
   # @param config [Hash] a hash to be merged into the result, usually only recursivly called by the method itself
+  # @param files [List] the list of files encountered in the tree get appended to this list
   #
   # @return [Hash] the resulting yaml config
   #
-  def self.ext_load_file(yaml_path, inheritance_key=nil, extend_existing_arrays=true, config = {}, tree_traversal: :breadthfirst)
+  def self.ext_load_file(yaml_path, inheritance_key=nil, extend_existing_arrays=true, config = {}, files: [], tree_traversal: :breadthfirst)
     if inheritance_key.nil?
       inheritance_key = @@ext_load_key || DEFAULT_INHERITANCE_KEY
     end
     raise "unknown tree_traversal option #{tree_traversal}" unless [:breadthfirst, :postorder].include? tree_traversal
     # the original code probably could also easily fit in this scheme now, but I did not want to touch the original code
     if tree_traversal==:postorder
-      tree = build_tree yaml_path, inheritance_key
+      tree, f = build_tree yaml_path, inheritance_key
+      files << f
       tree.postordered_each do |node|
         merged_children_config={}
         node.children.concat([node]).each do |child|
@@ -67,6 +69,7 @@ module YAML
     else
       total_config ||= {}
       yaml_path = YAML.make_absolute_path yaml_path
+      files << yaml_path
       super_config = YamlExtendHelper.encode_booleans YAML.load_file(File.open(yaml_path))
       super_inheritance_files = yaml_value_by_key inheritance_key, super_config
       delete_yaml_key inheritance_key, super_config # we don't merge the super inheritance keys into the base yaml
@@ -75,7 +78,7 @@ module YAML
         super_inheritance_files = [super_inheritance_files] unless super_inheritance_files.is_a? Array # we support strings as well as arrays of type string to extend from
         super_inheritance_files.each_with_index do |super_inheritance_file, index|
           super_config_path = File.dirname(yaml_path) + '/' + super_inheritance_file
-          total_config = YamlExtendHelper.encode_booleans YAML.ext_load_file(super_config_path, inheritance_key, extend_existing_arrays, total_config.deeper_merge(merged_config, extend_existing_arrays: extend_existing_arrays))
+          total_config = YamlExtendHelper.encode_booleans YAML.ext_load_file(super_config_path, inheritance_key, extend_existing_arrays, total_config.deeper_merge(merged_config, extend_existing_arrays: extend_existing_arrays), files: files)
         end
         YamlExtendHelper.decode_booleans total_config
       else
@@ -144,8 +147,9 @@ module YAML
     last_ref.delete key.last unless last_ref.nil?
   end
 
-  def self.build_tree(yaml_path, inheritance_key, tree = nil)
+  def self.build_tree(yaml_path, inheritance_key, tree = nil, files = [])
     yaml_path = YAML.make_absolute_path yaml_path
+    files << yaml_path
     node_config = YAML.load_file(File.open(yaml_path))
     children = yaml_value_by_key inheritance_key, node_config
     delete_yaml_key inheritance_key, node_config  # this info will be put in the tree
@@ -155,10 +159,10 @@ module YAML
       children = [children] unless children.is_a? Array # we support strings as well as arrays of type string to extend from
       children.each_with_index do |child, index|
         child_path = File.dirname(yaml_path) + '/' + child
-        YAML.build_tree(child_path, inheritance_key, node)
+        YAML.build_tree(child_path, inheritance_key, node, files)
       end
     end
-    return tree
+    return tree, files
   end
 
 end
