@@ -9,7 +9,7 @@ end
 RSpec.describe YAML,'#ext_load_file' do
   context 'Test inheritance feature' do
 
-    it 'locale overwrite' do
+    it 'multi-file inheritance precedence order' do
       yaml_obj = YAML.ext_load_file 'test_data/overwrite_multiple_files/child.yml'
 
       expect(yaml_obj['own_parent_L1_A']).to eql('parent L1 A value')
@@ -96,6 +96,13 @@ RSpec.describe YAML,'#ext_load_file' do
       expect(yaml_obj['string_data']['kappa']).to eql('false')
       expect(yaml_obj['string_data']['theta']).to eql('false')
       expect(yaml_obj['string_data']['delta']).to eql('true')
+    end
+    it 'can extend and overwrite nils' do
+      yaml_obj = YAML.ext_load_file 'test_data/nil_values/extended.yml'
+      expect(yaml_obj['overwritten_nil']).to eql('string value')
+      expect(yaml_obj['not_overwritten_string']).to eql('string value')
+      expect(yaml_obj['overwritten_false']).to eql(nil)
+      expect(yaml_obj['not_overwritten_true']).to eql(true)
     end
   end
 end

@@ -1,3 +1,3 @@
 module YamlExtend
-  VERSION = '0.2.5'.freeze
+  VERSION = '1.0.0'.freeze
 end
