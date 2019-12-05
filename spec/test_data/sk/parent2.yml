@@ -1,0 +1,4 @@
+# encoding: utf-8
+---
+parent1_key_overwritten: parent2
+parent2_key_own: parent2

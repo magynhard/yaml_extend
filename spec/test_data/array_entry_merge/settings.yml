@@ -1,0 +1,9 @@
+# encoding: utf-8
+---
+extends:
+  - 'base.yml'
+blockX:
+  - playground:
+      macros:
+        M_DERIVE: ja
+        M_REPLACE: replaced
