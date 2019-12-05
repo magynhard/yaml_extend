@@ -8,6 +8,23 @@ end
 
 RSpec.describe YAML,'#ext_load_file' do
   context 'Test inheritance feature' do
+
+    it 'multi-file inheritance precedence order' do
+      yaml_obj = YAML.ext_load_file 'test_data/overwrite_multiple_files/child.yml'
+
+      expect(yaml_obj['own_parent_L1_A']).to eql('parent L1 A value')
+      expect(yaml_obj['overwritten_until_L1_B']).to eql('parent L1 B value')
+      expect(yaml_obj['own_parent_L1_B']).to eql('parent L1 B value')
+      expect(yaml_obj['overwritten_until_L2_A']).to eql('parent L2 A value')
+      expect(yaml_obj['own_parent_L2_A']).to eql('parent L2 A value')
+      expect(yaml_obj['overwritten_until_L2_B']).to eql('parent L2 B value')
+      expect(yaml_obj['own_parent_L2_B']).to eql('parent L2 B value')
+      expect(yaml_obj['overwritten_until_L2_C']).to eql('parent L2 C value')
+      expect(yaml_obj['own_parent_L2_C']).to eql('parent L2 C value')
+      expect(yaml_obj['overwritten_until_child']).to eql('child value')
+      expect(yaml_obj['own_child']).to eql('child value')
+    end
+
     it 'extends with another yaml file' do
       yaml_obj = YAML.ext_load_file 'test_data/ext_load_file_02.yml'
       expect(yaml_obj).to include('first')
@@ -79,6 +96,13 @@ RSpec.describe YAML,'#ext_load_file' do
       expect(yaml_obj['string_data']['kappa']).to eql('false')
       expect(yaml_obj['string_data']['theta']).to eql('false')
       expect(yaml_obj['string_data']['delta']).to eql('true')
+    end
+    it 'can extend and overwrite nils' do
+      yaml_obj = YAML.ext_load_file 'test_data/nil_values/extended.yml'
+      expect(yaml_obj['overwritten_nil']).to eql('string value')
+      expect(yaml_obj['not_overwritten_string']).to eql('string value')
+      expect(yaml_obj['overwritten_false']).to eql(nil)
+      expect(yaml_obj['not_overwritten_true']).to eql(true)
     end
   end
 end
