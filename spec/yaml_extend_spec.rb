@@ -9,7 +9,7 @@ end
 RSpec.describe YAML,'#ext_load_file' do
   context 'Test inheritance feature' do
 
-    it 'multi-file inheritance precedence order' do
+    it 'respects multi-file inheritance precedence order' do
       yaml_obj = YAML.ext_load_file 'test_data/overwrite_multiple_files/child.yml'
 
       expect(yaml_obj['own_parent_L1_A']).to eql('parent L1 A value')
@@ -24,7 +24,19 @@ RSpec.describe YAML,'#ext_load_file' do
       expect(yaml_obj['overwritten_until_child']).to eql('child value')
       expect(yaml_obj['own_child']).to eql('child value')
     end
-
+    it 'appends new Array entries at the end from parent to children' do
+      yaml_obj = YAML.ext_load_file 'test_data/array_merge_order/baby.yml'
+      expect(yaml_obj['pears'][0]).to eql('Ambrosia')
+      expect(yaml_obj['pears'][1]).to eql('Bambinella')
+      expect(yaml_obj['pears'][2]).to eql('Corella')
+    end
+    it 'merges array entries together' do
+      yaml_obj = YAML.ext_load_file 'test_data/array_entry_merge/settings.yml'
+      expect(yaml_obj['blockX'][0]['playground']['macros']['M_BASE']).to eql('ja')
+      expect(yaml_obj['blockX'][0]['playground']['macros']['M_REPLACE']).to eql('to_be_replaced')
+      expect(yaml_obj['blockX'][1]['playground']['macros']['M_DERIVE']).to eql('ja')
+      expect(yaml_obj['blockX'][1]['playground']['macros']['M_REPLACE']).to eql('replaced')
+    end
     it 'extends with another yaml file' do
       yaml_obj = YAML.ext_load_file 'test_data/ext_load_file_02.yml'
       expect(yaml_obj).to include('first')

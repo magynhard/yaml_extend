@@ -1,0 +1,7 @@
+# encoding: utf-8
+---
+extends:
+  - parent1.yml
+  - parent2.yml
+
+some_other_key: child
