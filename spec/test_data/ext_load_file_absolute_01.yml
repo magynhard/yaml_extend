@@ -1,0 +1,7 @@
+# encoding: utf-8
+---
+first: "foo"
+extends: 
+    - /tmp/ext_load_file_absolute_02.yml
+    - ext_load_file_absolute_03.yml
+

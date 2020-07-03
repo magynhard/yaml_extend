@@ -45,6 +45,17 @@ RSpec.describe YAML,'#ext_load_file' do
       yaml_obj = YAML.ext_load_file 'test_data/ext_load_file_04.yml'
       expect(yaml_obj).to include('first')
     end
+    it 'extends with another yaml from another absolute directory' do
+      tmp_file = Tempfile.new
+      tmp_file.write(File.read('spec/test_data/ext_load_file_absolute_02.yml'))
+      tmp_file.close
+      expect(tmp_file.path).to start_with('/')
+
+      yaml_obj = YAML.ext_load_file 'test_data/ext_load_file_absolute_01.yml'
+      expect(yaml_obj['first']).to eql('foo')
+      expect(yaml_obj['absolute']).to eql(true)
+      expect(yaml_obj['third']).to eql('charm')
+     end
     it 'extends with another yaml file by using another extend key' do
       yaml_obj = YAML.ext_load_file 'test_data/other_key.yml', 'inherits_from'
       expect(yaml_obj).to include('first')

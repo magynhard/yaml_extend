@@ -1,5 +1,6 @@
 require "bundler/setup"
 require "yaml_extend"
+require 'tempfile'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
