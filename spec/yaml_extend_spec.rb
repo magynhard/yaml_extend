@@ -46,15 +46,30 @@ RSpec.describe YAML,'#ext_load_file' do
       expect(yaml_obj).to include('first')
     end
     it 'extends with another yaml from another absolute directory' do
-      tmp_file = Tempfile.new
-      tmp_file.write(File.read('spec/test_data/ext_load_file_absolute_02.yml'))
-      tmp_file.close
-      expect(tmp_file.path).to start_with('/')
-
-      yaml_obj = YAML.ext_load_file 'test_data/ext_load_file_absolute_01.yml'
+      source_tmp_file_path = File.expand_path 'spec/test_data/ext_load_file_absolute_02.yml'
+      source_tmp_file_content = File.read(source_tmp_file_path)
+      source_tmp_file_name = File.basename source_tmp_file_path
+      final_tmp_dir = Dir.tmpdir + '/rspec/'
+      dest_tmp_file_path = final_tmp_dir + source_tmp_file_name
+      FileUtils.mkdir_p final_tmp_dir
+      FileUtils.cp_r source_tmp_file_path, dest_tmp_file_path
+      # create platform specific yaml file by template
+      is_windows_platform = (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+      if is_windows_platform
+        expect(dest_tmp_file_path[1]).to eql(':')
+      else
+        expect(dest_tmp_file_path).to start_with('/')
+      end
+      yaml_template = File.read('spec/test_data/ext_load_file_absolute_01.yml.tmpl')
+      final_yaml_template_content = yaml_template.gsub('{{absolute_template_path}}', dest_tmp_file_path)
+      final_yaml_template_path = final_tmp_dir + 'ext_load_file_absolute_01.yml'
+      File.write(final_yaml_template_path, final_yaml_template_content)
+      FileUtils.cp_r('spec/test_data/ext_load_file_absolute_03.yml', final_tmp_dir)
+      yaml_obj = YAML.ext_load_file final_yaml_template_path
       expect(yaml_obj['first']).to eql('foo')
       expect(yaml_obj['absolute']).to eql(true)
       expect(yaml_obj['third']).to eql('charm')
+      FileUtils.rm_rf(final_tmp_dir)
      end
     it 'extends with another yaml file by using another extend key' do
       yaml_obj = YAML.ext_load_file 'test_data/other_key.yml', 'inherits_from'
