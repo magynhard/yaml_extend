@@ -66,7 +66,13 @@ module YAML
     if super_inheritance_files && super_inheritance_files != ''
       super_inheritance_files = [super_inheritance_files] unless super_inheritance_files.is_a? Array # we support strings as well as arrays of type string to extend from
       super_inheritance_files.each_with_index do |super_inheritance_file, index|
-        super_config_path = File.dirname(yaml_path) + '/' + super_inheritance_file
+        # Extend a YAML path in an absolute directory
+        if YAML.absolute_path?(super_inheritance_file)
+          super_config_path = YAML.make_absolute_path(super_inheritance_file)
+        # Extend a YAML path in a relative directory
+        else
+          super_config_path = File.dirname(yaml_path) + '/' + super_inheritance_file
+        end
         total_config = YAML.ext_load_file_recursive(super_config_path, inheritance_key, extend_existing_arrays, total_config)
       end
     end
