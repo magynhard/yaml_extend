@@ -31,11 +31,11 @@ It is possible to build inheritance trees like:
 ```
 or like this:
 ```
-default.yml   english.yml          default.yml   german.yml       
+fruits.yml   vegetables.yml          default.yml   extensions.yml       
          \    /                             \    /                
-          uk.yml                            de.yml
+          food.yml                          merged.yml
                                               |
-                                            at.yml
+                                            another_extended.yml
 ```
 
 A file can inherit from as many as you want. Trees can be nested as deep as you want.
@@ -151,11 +151,26 @@ config = YAML.ext_load_file 'custom2.yml', ['options','extend_file']
 ```
 
 ## Documentation
-YAML.ext_load_file(yaml_path, inheritance_key='extends', extend_existing_arrays=true)
+```ruby
+YAML.ext_load_file(yaml_path, inheritance_key='extends', options = {})
+```
+- `yaml_path` (String) relative or absolute path to yaml file to inherit from
+- `inheritance_key` (String) you can overwrite the default key, if you use the default 'extends' already as part of your configuration. The inheritance_key is NOT included, that means it will be deleted, in the final merged file. Default: `'extends'`
+- `options` (Hash) collection of optional options, including all options of the based `deep_merge` gem
+  - `:preserve_inheritance_key` (Boolean) Preserve inheritance key(s) from resulting yaml, does most time not make sense especially in multiple inheritance - DEFAULT: false
+  - The following options are deep merge options that can be passed by - but the defaults differ from original
+    https://github.com/danielsdeleo/deep_merge#options
+  - `:preserve_unmergeables` (Boolean) Set to true to skip any unmergeable elements from source - DEFAULT: false
+  - `:knockout_prefix` (String) Set to string value to signify prefix which deletes elements from existing element - DEFAULT: nil
+  - `:overwrite_arrays` (Boolean) Set to true if you want to avoid merging arrays - DEFAULT: false
+  - `:sort_merged_arrays` (Boolean) Set to true to sort all arrays that are merged together - DEFAULT: false
+  - `:unpack_arrays` (String) Set to string value to run "Array::join" then "String::split" against all arrays - DEFAULT: nil
+  - `:merge_hash_arrays` (Boolean) Set to true to merge hashes within arrays - DEFAULT: false
+  - `:extend_existing_arrays` (Boolean) Set to true to extend existing arrays, instead of overwriting them - DEFAULT: true
+  - `:merge_nil_values` (Boolean) Set to true to merge nil hash values, overwriting a possibly non-nil value - DEFAULT: false
+  - `:merge_debug` (Boolean) Set to true to get console output of merge process for debugging - DEFAULT: false
 
-- *yaml_path* relative or absolute path to yaml file to inherit from
-- *inheritance_key* you can overwrite the default key, if you use the default 'extends' already as part of your configuration. The inheritance_key is NOT included, that means it will be deleted, in the final merged file. Default: 'extends'
-- *extend_existing_arrays* Extends existing arrays in yaml structure instead of replacing them. Default: true
+See also rubydoc at [https://www.rubydoc.info/gems/yaml_extend](https://www.rubydoc.info/gems/yaml_extend)
 
 ## Contributing
 

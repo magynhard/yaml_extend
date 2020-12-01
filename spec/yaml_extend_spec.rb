@@ -142,6 +142,45 @@ RSpec.describe YAML,'#ext_load_file' do
       expect(yaml_obj['overwritten_false']).to eql(nil)
       expect(yaml_obj['not_overwritten_true']).to eql(true)
     end
+    it 'can extend and overwrite nils' do
+      yaml_obj = YAML.ext_load_file 'test_data/nil_values/extended.yml'
+      expect(yaml_obj['overwritten_nil']).to eql('string value')
+      expect(yaml_obj['not_overwritten_string']).to eql('string value')
+      expect(yaml_obj['overwritten_false']).to eql(nil)
+      expect(yaml_obj['not_overwritten_true']).to eql(true)
+    end
+  end
+  context 'Test options' do
+    # parameter changed from Boolean to Hash in 1.0.2
+    it 'merges arrays if parameter true (backward compatibility)' do
+      yaml_obj = YAML.ext_load_file 'test_data/option_extend_existing_array/child.yml', nil, true
+      expect(yaml_obj['fruits']).to include('Banana','Orange','Grapefruit')
+    end
+    # parameter changed from Boolean to Hash in 1.0.2
+    it 'does not merge arrays if parameter false (backward compatibility)' do
+      yaml_obj = YAML.ext_load_file 'test_data/option_extend_existing_array/child.yml', nil, false
+      expect(yaml_obj['fruits']).to include('Grapefruit')
+      expect(yaml_obj['fruits']).not_to include('Banana','Orange')
+    end
+    # parameter changed from Boolean to Hash in 1.0.2
+    it 'does merge arrays if parameter true in options hash' do
+      yaml_obj = YAML.ext_load_file 'test_data/option_extend_existing_array/child.yml', nil, { extend_existing_arrays: true }
+      expect(yaml_obj['fruits']).to include('Banana','Orange','Grapefruit')
+    end
+    # parameter changed from Boolean to Hash in 1.0.2
+    it 'does not merge arrays if parameter false in options hash' do
+      yaml_obj = YAML.ext_load_file 'test_data/option_extend_existing_array/child.yml', nil, { extend_existing_arrays: false }
+      expect(yaml_obj['fruits']).to include('Grapefruit')
+      expect(yaml_obj['fruits']).not_to include('Banana','Orange')
+    end
+    it 'does not delete inheritance key if option is set to false' do
+      yaml_obj = YAML.ext_load_file 'test_data/option_extend_existing_array/child.yml', nil, { preserve_inheritance_key: true }
+      expect(yaml_obj).to include('extends')
+    end
+    it 'deletes inheritance key if option is set to true' do
+      yaml_obj = YAML.ext_load_file 'test_data/option_extend_existing_array/child.yml', nil, { preserve_inheritance_key: false }
+      expect(yaml_obj).not_to include('extends')
+    end
   end
 end
 
