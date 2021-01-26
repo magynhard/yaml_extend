@@ -1,0 +1,4 @@
+# encoding: utf-8
+---
+different_file_extension_order: <%= true %>
+yaml_erb: <%= 'Yaml' + 'ERB' %>
