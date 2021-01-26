@@ -273,10 +273,16 @@ end
 
 RSpec.describe YAML,'#erb_in_yaml' do
   context 'Interprets ERB tags in yaml.erb files' do
-    it 'verifies ERB (String)' do
+    it "verifies ERB (String) in files ending with '.erb' or including '.erb.'' in file name" do
       yaml_obj = YAML.ext_load_file 'test_data/erb_in_yaml/config.yml.erb'
       expect(yaml_obj['erb']).to eql('FooBar')
       expect(yaml_obj['super_erb']).to eql('SuperFoo')
+      expect(yaml_obj['different_file_extension_order']).to eql(true)
+      expect(yaml_obj['yaml_erb']).to eql('YamlERB')
+      expect(yaml_obj['erbse1']).to eql("<%= 'DoNot' + 'Render1' %>")
+      expect(yaml_obj['erbse2']).to eql("<%= 'DoNot' + 'Render2' %>")
+      expect(yaml_obj['herb']).to eql("<%= 'DoNot' + 'Render3' %>")
+      expect(yaml_obj['herbs']).to eql("<%= 'DoNot' + 'Render4' %>")
     end
   end
 end

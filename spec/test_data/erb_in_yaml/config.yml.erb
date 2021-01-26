@@ -1,4 +1,10 @@
 # encoding: utf-8
 ---
-extends: 'super.yml.erb'
+extends:
+  - 'super.yml.erb'
+  - 'super.erb.yml'
+  - 'config.erbse.yml'
+  - 'config.yml.erbse'
+  - 'config.yml.herb'
+  - 'config.yml.herbs'
 erb: <%= 'Foo' + 'Bar' %>

@@ -107,7 +107,7 @@ module YAML
     yaml_path = YAML.make_absolute_path yaml_path
 
     super_config =
-      if yaml_path.match(/\.erb/)
+      if yaml_path.match(/(\.erb\.|\.erb$)/)
         YAML.load(ERB.new(File.read(yaml_path)).result)
       else
         YAML.load_file(File.open(yaml_path))
