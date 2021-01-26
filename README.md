@@ -5,7 +5,9 @@
 
 > Extends YAML to support file based inheritance.
 
-That can be very handy to build a configuration hierachy.
+That can be very handy to build a configuration hierarchy.
+
+Basic support for ERB (embedded ruby) is included and automatically applied when config files are named `*.erb` or `*.erb.*`.
 
 ## Installation
 
