@@ -105,7 +105,14 @@ module YAML
     total_config = config.clone
 
     yaml_path = YAML.make_absolute_path yaml_path
-    super_config = YAML.load_file(File.open(yaml_path))
+
+    super_config =
+      if yaml_path.match(/\.erb/)
+        YAML.load(ERB.new(File.read(yaml_path)).result)
+      else
+        YAML.load_file(File.open(yaml_path))
+      end
+
     super_inheritance_files = yaml_value_by_key inheritance_key, super_config
     unless options[:preserve_inheritance_key]
       delete_yaml_key inheritance_key, super_config # we don't merge the super inheritance keys into the base yaml
