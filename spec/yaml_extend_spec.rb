@@ -9,6 +9,13 @@ end
 RSpec.describe YAML,'#ext_load_file' do
   context 'Test inheritance feature' do
 
+    it 'retains falsey input keys' do
+      yaml_obj = YAML.ext_load_file 'test_data/falsey_key.yml'
+
+      expect(yaml_obj['false']).to eql('San Pellegrino')
+      expect(yaml_obj['nil']).to eql('Fanta')
+      expect(yaml_obj['no']).to eql('Gerolsteiner')
+    end
     it 'respects multi-file inheritance precedence order' do
       yaml_obj = YAML.ext_load_file 'test_data/overwrite_multiple_files/child.yml'
 
