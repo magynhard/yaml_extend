@@ -1,0 +1,7 @@
+dog:
+- breed: lab
+  name: Fido
+  traits:
+  - name: friendly
+  - name: smart
+  - name: strong

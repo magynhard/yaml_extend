@@ -1,0 +1,5 @@
+extends: parent.yml
+dog:
+- breed: lab
+  traits:
+  - name: happy

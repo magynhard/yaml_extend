@@ -173,6 +173,13 @@ RSpec.describe YAML,'#ext_load_file' do
       expect(yaml_obj['fruits']).to include('Grapefruit')
       expect(yaml_obj['fruits']).not_to include('Banana','Orange')
     end
+    it 'does merge hash arrays if parameter true in options hash' do
+      yaml_obj = YAML.ext_load_file 'spec/test_data/merge_hash_array_overwrite/child.yml', nil, { merge_hash_arrays: true }
+      trait_values = yaml_obj['dog'][0]['traits'].map do |trait|
+        trait['name']
+      end
+      expect(trait_values).to match_array(['friendly', 'happy', 'smart', 'strong'])
+    end
     it 'does not delete inheritance key if option is set to false' do
       yaml_obj = YAML.ext_load_file 'test_data/option_extend_existing_array/child.yml', nil, { preserve_inheritance_key: true }
       expect(yaml_obj).to include('extends')
