@@ -1,4 +1,6 @@
-traits:
-- name: friendly
-- name: smart
-- name: strong
+dog:
+  - breed: golden
+    traits:
+    - name: friendly
+    - name: smart
+    - name: strong

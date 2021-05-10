@@ -1,3 +1,5 @@
 extends: parent.yml
-traits:
-- name: happy
+dog:
+  - breed: golden
+    traits:
+    - name: happy
