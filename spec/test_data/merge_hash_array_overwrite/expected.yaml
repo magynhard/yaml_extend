@@ -1,7 +1,5 @@
-dog:
-- breed: lab
-  traits:
-  - name: friendly
-  - name: happy
-  - name: smart
-  - name: strong
+traits:
+- name: friendly
+- name: happy
+- name: smart
+- name: strong

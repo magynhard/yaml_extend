@@ -175,7 +175,7 @@ RSpec.describe YAML,'#ext_load_file' do
     end
     it 'does merge hash arrays if parameter true in options hash' do
       yaml_obj = YAML.ext_load_file 'spec/test_data/merge_hash_array_overwrite/child.yml', nil, { merge_hash_arrays: true }
-      trait_values = yaml_obj['dog'][0]['traits'].map do |trait|
+      trait_values = yaml_obj['traits'].map do |trait|
         trait['name']
       end
       expect(trait_values).to match_array(['friendly', 'happy', 'smart', 'strong'])
