@@ -50,7 +50,7 @@ module YAML
   # Extended variant of the YAML.load_file method by providing the
   # ability to inherit from other YAML file(s)
   #
-  # @param [String] yaml_path the path to the yaml file to be loaded
+  # @param [String|Pathname] yaml_path the path to the yaml file to be loaded
   # @param [String|Array] inheritance_key The key used in the yaml file to extend from another YAML file. Use an Array if you want to use a tree structure key like "options.extends" => ['options','extends']
   # @param [Hash] options to pass, including deep_merge options as well as
   # @option options [Boolean] :preserve_inheritance_key Preserve inheritance key(s) from resulting yaml, does most time not make sense especially in multiple inheritance - DEFAULT: false
@@ -77,10 +77,13 @@ module YAML
 
   private
 
+  # Same doc as ext_load_file, but extended by additional parameter 'config'
   #
-  # @param config [Hash] a hash to be merged into the result, usually only recursivly called by the method itself
+  # @param [Hash] config a hash to be merged into the result, usually only recursively called by the method itself
   #
   def self.ext_load_file_recursive(yaml_path, inheritance_key, options = {}, config)
+    # Allow also class Pathname instead of class String
+    yaml_path = yaml_path.to_s
     # backward compatibility to 1.0.1
     if options == true || options == false
       options = {extend_existing_arrays: options}
