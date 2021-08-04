@@ -143,8 +143,12 @@ module YAML
     # caller_locations returns the current execution stack
     #   [0] is the call from ext_load_file_recursive,
     #   [1] is inside ext_load_file,
-    #   [2] is the exteranl caller of YAML.ext_load_file
-    base_path = File.dirname(caller_locations[2].path)
+    #   [2] is the external caller of YAML.ext_load_file
+    base_path = if defined?(caller_locations)
+                  File.dirname(caller_locations[2].path)
+                else # Fallback for ruby < 2.1.10
+                  File.dirname(caller[2])
+                end
     return base_path + '/' + file_path if File.exist? base_path + '/' + file_path # relative path from yaml file
     return Dir.pwd + '/' + file_path if File.exist? Dir.pwd + '/' + file_path # relative path from project
     error_message = "Can not find absolute path of '#{file_path}'"
