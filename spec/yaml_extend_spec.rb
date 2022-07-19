@@ -286,3 +286,16 @@ RSpec.describe YAML,'#erb_in_yaml' do
     end
   end
 end
+
+RSpec.describe YAML,'using aliases (ruby 3.1 and psych 4 compatibility)' do
+  context 'Can handle aliases' do
+    it "handles aliases in yml file" do
+      yaml_obj = YAML.ext_load_file 'test_data/aliases/extended.yml'
+      expect(yaml_obj['data']['code']).to eql(123)
+    end
+    it "handles aliases in yml erb file" do
+      yaml_obj = YAML.ext_load_file 'test_data/aliases/extended.erb.yml'
+      expect(yaml_obj['data']['code']).to eql(123)
+    end
+  end
+end

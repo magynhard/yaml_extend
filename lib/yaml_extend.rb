@@ -69,7 +69,7 @@ module YAML
   # @option options [Boolean] :merge_debug Set to true to get console output of merge process for debugging - DEFAULT: false
   #
   # @param  [Boolean] options Fallback for backward compatiblity: extend existing arrays instead of replacing them (deep_merge)
-  # @return [Hash] the resulting yaml config 
+  # @return [Hash] the resulting yaml config
   #
   def self.ext_load_file(yaml_path, inheritance_key = nil, options = {})
     YAML.ext_load_file_recursive(yaml_path, inheritance_key, options, {})
@@ -111,9 +111,9 @@ module YAML
 
     super_config =
       if yaml_path.match(/(\.erb\.|\.erb$)/)
-        YAML.load(ERB.new(File.read(yaml_path)).result)
+        YAML.unsafe_load(ERB.new(File.read(yaml_path)).result)
       else
-        YAML.load_file(File.open(yaml_path))
+        YAML.unsafe_load_file(File.open(yaml_path))
       end
 
     super_inheritance_files = yaml_value_by_key inheritance_key, super_config
@@ -138,8 +138,8 @@ module YAML
     total_config.deeper_merge!(super_config, deep_merge_options)
   end
 
-  # some logic to ensure absolute file inheritance as well as 
-  # relative file inheritance in yaml files  
+  # some logic to ensure absolute file inheritance as well as
+  # relative file inheritance in yaml files
   def self.make_absolute_path(file_path)
     private_class_method
     return file_path if YAML.absolute_path?(file_path) && File.exist?(file_path)
