@@ -15,15 +15,15 @@ module YAML
   @@ext_load_key = nil
 
   DEEP_MERGE_OPTIONS = [
-      :preserve_unmergeables,
-      :knockout_prefix,
-      :overwrite_arrays,
-      :sort_merged_arrays,
-      :unpack_arrays,
-      :merge_hash_arrays,
-      :extend_existing_arrays,
-      :merge_nil_values,
-      :merge_debug,
+    :preserve_unmergeables,
+    :knockout_prefix,
+    :overwrite_arrays,
+    :sort_merged_arrays,
+    :unpack_arrays,
+    :merge_hash_arrays,
+    :extend_existing_arrays,
+    :merge_nil_values,
+    :merge_debug,
   ]
 
   #
@@ -86,19 +86,19 @@ module YAML
     yaml_path = yaml_path.to_s
     # backward compatibility to 1.0.1
     if options == true || options == false
-      options = {extend_existing_arrays: options}
+      options = { extend_existing_arrays: options }
     end
     default_options = {
-        preserve_inheritance_key: false,
-        preserve_unmergeables: false,
-        knockout_prefix: nil,
-        overwrite_arrays: false,
-        sort_merged_arrays: false,
-        unpack_arrays: nil,
-        merge_hash_arrays: false,
-        extend_existing_arrays: true,
-        merge_nil_values: false,
-        merge_debug: false,
+      preserve_inheritance_key: false,
+      preserve_unmergeables: false,
+      knockout_prefix: nil,
+      overwrite_arrays: false,
+      sort_merged_arrays: false,
+      unpack_arrays: nil,
+      merge_hash_arrays: false,
+      extend_existing_arrays: true,
+      merge_nil_values: false,
+      merge_debug: false,
     }
     options = default_options.merge options
     private_class_method
@@ -111,9 +111,17 @@ module YAML
 
     super_config =
       if yaml_path.match(/(\.erb\.|\.erb$)/)
-        YAML.unsafe_load(ERB.new(File.read(yaml_path)).result)
+        if YAML.respond_to? :unsafe_load # backward compatibility for Ruby 3.1 / Psych 4
+          YAML.unsafe_load(ERB.new(File.read(yaml_path)).result)
+        else
+          YAML.load(ERB.new(File.read(yaml_path)).result)
+        end
       else
-        YAML.unsafe_load_file(File.open(yaml_path))
+        if YAML.respond_to? :unsafe_load_file # backward compatibility for Ruby 3.1 / Psych 4
+          YAML.unsafe_load_file(File.open(yaml_path))
+        else
+          YAML.load_file(File.open(yaml_path))
+        end
       end
 
     super_inheritance_files = yaml_value_by_key inheritance_key, super_config
@@ -149,7 +157,8 @@ module YAML
     #   [2] is the external caller of YAML.ext_load_file
     base_path = if defined?(caller_locations)
                   File.dirname(caller_locations[2].path)
-                else # Fallback for ruby < 2.1.10
+                else
+                  # Fallback for ruby < 2.1.10
                   File.dirname(caller[2])
                 end
     return base_path + '/' + file_path if File.exist? base_path + '/' + file_path # relative path from yaml file
@@ -165,7 +174,7 @@ module YAML
   def self.absolute_path?(path)
     private_class_method
     path.start_with?('/') || # unix like
-        (path.length >= 3 && path[1] == ':') # ms windows
+      (path.length >= 3 && path[1] == ':') # ms windows
   end
 
   # Return the value of the corresponding key
@@ -187,7 +196,7 @@ module YAML
 
   def self.valid_key_type?(key)
     key.is_a?(Array) || key.is_a?(String) ||
-        raise(InvalidKeyTypeError, "Invalid key of type '#{key.class.name}'. Valid types are String and Array.")
+      raise(InvalidKeyTypeError, "Invalid key of type '#{key.class.name}'. Valid types are String and Array.")
   end
 
   def self.delete_yaml_key(key, config)
