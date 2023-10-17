@@ -6,6 +6,7 @@ require 'yaml_extend/version'
 Gem::Specification.new do |spec|
   spec.name          = "yaml_extend"
   spec.version       = YamlExtend::VERSION
+  spec.executables   = %w[yaml_extend]
   spec.authors       = ["Matthäus Beyrle"]
   spec.email         = ["yaml_extend.gemspec@mail.magynhard.de"]
 

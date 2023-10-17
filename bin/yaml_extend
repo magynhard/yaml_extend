@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'yaml_extend'
+
+arg = ARGV[0]
+
+if %w[help -h --help].include?(arg) || arg.nil? || arg == ''
+  puts <<-TEXT
+    
+    yaml_extend #{YamlExtend::VERSION}
+    https://github.com/magynhard/yaml_extend
+
+    yaml_extend -h --help     # show this info
+    yaml_extend <file>        # parse and output given file
+
+  TEXT
+else
+  puts YAML.ext_load_file(arg).to_yaml
+end

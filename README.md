@@ -9,22 +9,19 @@ That can be very handy to build a configuration hierarchy.
 
 Basic support for ERB (embedded ruby) is included and automatically applied when config files are named `*.erb` or `*.erb.*`.
 
-## Installation
+If you are just doing administration without knowing ruby, you can also just use the command line tool that is included to use this librarys features. Ensure, that [ruby](https://www.ruby-lang.org/) is installed on your system, before following further instructions. 
 
-Add this line to your application's Gemfile:
+### Contents
+* [Common information](#common-information)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Command line](#command-line)
+* [Documentation](#documentation)
+* [Contributing](#contributing)
 
-```ruby
-gem 'yaml_extend'
-```
 
-And then execute:
 
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install yaml_extend
-    
+<a name="common-information"></a>    
 ## Common information
 
 It is possible to build inheritance trees like:
@@ -52,6 +49,32 @@ The files to inherit from are specified by the key 'extends:' in the YAML file.
 That key can be customized if you prefer another one.
 See the examples below.
 
+
+
+
+<a name="installation"></a>
+## Installation
+### Ruby
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'yaml_extend'
+```
+
+And then execute:
+
+    $ bundle install
+
+### Command line
+If you just want to use the command line then run
+
+    $ gem install yaml_extend
+
+
+
+
+
+<a name="usage"></a>
 ## Usage
 yaml_extend adds the method YAML.ext_load_file to YAML.
 
@@ -155,6 +178,29 @@ foo: 'bar'
 config = YAML.ext_load_file 'custom2.yml', ['options','extend_file']
 ```
 
+
+
+<a name="command-line"></a>
+## Command line
+
+`yaml_extend` is also available on the command line after installation.
+
+To parse and merge a prepared YAML file, just run
+
+```
+yaml_extend path/to/my/yaml_file.yml
+```
+
+Usually you might want to put the result into resulting YAML file. So just use the basic command line features to do so:
+
+
+```
+yaml_extend path/to/my/yaml_file.yml > combined_yaml.yml
+```
+
+
+
+<a name="documentation"></a>
 ## Documentation
 ```ruby
 YAML.ext_load_file(yaml_path, inheritance_key='extends', options = {})
@@ -177,7 +223,9 @@ YAML.ext_load_file(yaml_path, inheritance_key='extends', options = {})
 
 See also rubydoc at [https://www.rubydoc.info/gems/yaml_extend](https://www.rubydoc.info/gems/yaml_extend)
 
-## Contributing
 
+
+<a name="documentation"></a>
+## Contributing
 Bug reports and pull requests are welcome on GitHub at https://github.com/magynhard/yaml_extend. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
