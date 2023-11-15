@@ -1,6 +1,7 @@
 require 'yaml_extend/version'
 
 require 'yaml'
+require 'erb'
 require 'deep_merge/rails_compat'
 
 require_relative 'custom_errors/invalid_key_type_error'
