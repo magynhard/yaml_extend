@@ -90,7 +90,9 @@ Given the following both files are defined:
 extends: 'super.yml'
 data:
     name: 'Mr. Superman'
-    age: 134    
+    age: 134
+    # using ERB templating with ruby code 
+    foo: '<%= 'bar' %>'
     favorites:
         - 'Raspberrys'
 ```
@@ -117,6 +119,7 @@ the returned YAML value results in
 data:
     name: 'Mr. Superman'
     age: 134
+    foo: 'bar'
     power: 2000
     favorites:
         - 'Bananas'
