@@ -15,7 +15,7 @@ If you are just doing administration without knowing ruby, you can also just use
 * [Common information](#common-information)
 * [Installation](#installation)
 * [Usage](#usage)
-* [Command line](#command-line)
+* [Command line](#command-line-usage)
 * [Documentation](#documentation)
 * [Contributing](#contributing)
 
@@ -63,12 +63,12 @@ gem 'yaml_extend'
 
 And then execute:
 
-    $ bundle install
+    bundle install
 
 ### Command line
 If you just want to use the command line then run
 
-    $ gem install yaml_extend
+    gem install yaml_extend
 
 
 
@@ -180,7 +180,7 @@ config = YAML.ext_load_file 'custom2.yml', ['options','extend_file']
 
 
 
-<a name="command-line"></a>
+<a name="command-line-usage"></a>
 ## Command line
 
 `yaml_extend` is also available on the command line after installation.
