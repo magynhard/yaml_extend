@@ -201,6 +201,7 @@ Usually you might want to put the result into resulting YAML file. So just use t
 yaml_extend path/to/my/yaml_file.yml > combined_yaml.yml
 ```
 
+Default options are used, custom options are not yet supported as parameters.
 
 
 <a name="documentation"></a>
