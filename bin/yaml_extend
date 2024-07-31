@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'yaml_extend'
+require_relative '../lib/yaml_extend'
 
 arg = ARGV[0]
 

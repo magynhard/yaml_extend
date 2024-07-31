@@ -1,5 +1,5 @@
-require "bundler/setup"
-require "yaml_extend"
+require 'bundler/setup'
+require 'yaml_extend'
 require 'tempfile'
 
 RSpec.configure do |config|

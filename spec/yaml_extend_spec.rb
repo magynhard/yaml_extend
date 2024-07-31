@@ -1,7 +1,7 @@
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe YamlExtend do
-  it "has a version number" do
+  it 'has a version number' do
     expect(YamlExtend::VERSION).not_to be nil
   end
 end
@@ -273,7 +273,7 @@ end
 
 RSpec.describe YAML,'#erb_in_yaml' do
   context 'Interprets ERB tags in yaml.erb files' do
-    it "verifies ERB (String) in files ending with '.erb' or including '.erb.'' in file name" do
+    it "verifies ERB (String) in files ending with '.erb' or including '.erb.' in file name" do
       yaml_obj = YAML.ext_load_file 'test_data/erb_in_yaml/config.yml.erb'
       expect(yaml_obj['erb']).to eql('FooBar')
       expect(yaml_obj['super_erb']).to eql('SuperFoo')
@@ -289,11 +289,11 @@ end
 
 RSpec.describe YAML,'using aliases (ruby 3.1 and psych 4 compatibility)' do
   context 'Can handle aliases' do
-    it "handles aliases in yml file" do
+    it 'handles aliases in yml file' do
       yaml_obj = YAML.ext_load_file 'test_data/aliases/extended.yml'
       expect(yaml_obj['data']['code']).to eql(123)
     end
-    it "handles aliases in yml erb file" do
+    it 'handles aliases in yml erb file' do
       yaml_obj = YAML.ext_load_file 'test_data/aliases/extended.erb.yml'
       expect(yaml_obj['data']['code']).to eql(123)
     end

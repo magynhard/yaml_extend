@@ -1,5 +1,5 @@
-require "spec_helper"
-require "json"
+require 'spec_helper'
+require 'json'
 
 YAML_BINARY_PATH = './bin/yaml_extend'
 
