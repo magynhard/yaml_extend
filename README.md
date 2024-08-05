@@ -86,7 +86,7 @@ This method works like the original YAML.load_file, by extending it with file in
 Given the following both files are defined:
 
 ```yaml
-# start.yml
+# start.erb.yml
 extends: 'super.yml'
 data:
     name: 'Mr. Superman'
@@ -110,7 +110,7 @@ data:
 When you then call `ext_load_file`
 
 ```ruby
-config = YAML.ext_load_file 'start.yml'
+config = YAML.ext_load_file 'start.erb.yml'
 ```
 
 the returned YAML value results in
