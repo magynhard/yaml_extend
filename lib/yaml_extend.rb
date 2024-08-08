@@ -99,6 +99,7 @@ module YAML
       extend_existing_arrays: true,
       merge_nil_values: false,
       merge_debug: false,
+      assume_erb: false,
     }
     options = default_options.merge options
     private_class_method
@@ -110,7 +111,7 @@ module YAML
     yaml_path = YAML.make_absolute_path yaml_path
 
     super_config =
-      if yaml_path.match(/(\.erb\.|\.erb$)/)
+      if options[:assume_erb] || yaml_path.match(/(\.erb\.|\.erb$)/)
         if YAML.respond_to? :unsafe_load # backward compatibility for Ruby 3.1 / Psych 4
           YAML.unsafe_load(ERB.new(File.read(yaml_path)).result)
         else

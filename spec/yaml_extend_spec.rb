@@ -287,6 +287,22 @@ RSpec.describe YAML,'#erb_in_yaml' do
   end
 end
 
+RSpec.describe YAML,'#force_erb_in_yaml' do
+  context 'Interprets ERB when option says so' do
+    it 'verifies ERB (String)' do
+      yaml_obj = YAML.ext_load_file 'test_data/erb_in_yaml/config_with_erb.yml', nil, assume_erb: true
+      expect(yaml_obj['erb']).to eql('FooBar')
+      expect(yaml_obj['super_erb']).to eql('SuperFoo')
+      expect(yaml_obj['different_file_extension_order']).to eql(true)
+      expect(yaml_obj['yaml_erb']).to eql('YamlERB')
+      expect(yaml_obj['erbse1']).to eql('DoNotRender1')
+      expect(yaml_obj['erbse2']).to eql('DoNotRender2')
+      expect(yaml_obj['herb']).to eql('DoNotRender3')
+      expect(yaml_obj['herbs']).to eql('DoNotRender4')
+    end
+  end
+end
+
 RSpec.describe YAML,'using aliases (ruby 3.1 and psych 4 compatibility)' do
   context 'Can handle aliases' do
     it 'handles aliases in yml file' do
