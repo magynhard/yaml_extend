@@ -67,6 +67,7 @@ module YAML
   # @option options [Boolean] :extend_existing_arrays Set to true to extend existing arrays, instead of overwriting them - DEFAULT: true
   # @option options [Boolean] :merge_nil_values Set to true to merge nil hash values, overwriting a possibly non-nil value - DEFAULT: false
   # @option options [Boolean] :merge_debug Set to true to get console output of merge process for debugging - DEFAULT: false
+  # @option options [Boolean] :force_erb Set to true to force ERB processing of the yaml file, even if it does not end with '.erb' or include '.erb.' in the file name - DEFAULT: false
   #
   # @param  [Boolean] options Fallback for backward compatiblity: extend existing arrays instead of replacing them (deep_merge)
   # @return [Hash] the resulting yaml config
@@ -99,7 +100,7 @@ module YAML
       extend_existing_arrays: true,
       merge_nil_values: false,
       merge_debug: false,
-      assume_erb: false,
+      force_erb: false,
     }
     options = default_options.merge options
     private_class_method
@@ -111,7 +112,7 @@ module YAML
     yaml_path = YAML.make_absolute_path yaml_path
 
     super_config =
-      if options[:assume_erb] || yaml_path.match(/(\.erb\.|\.erb$)/)
+      if options[:force_erb] || yaml_path.match(/(\.erb\.|\.erb$)/)
         if YAML.respond_to? :unsafe_load # backward compatibility for Ruby 3.1 / Psych 4
           YAML.unsafe_load(ERB.new(File.read(yaml_path)).result)
         else

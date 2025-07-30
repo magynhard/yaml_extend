@@ -288,9 +288,9 @@ RSpec.describe YAML,'#erb_in_yaml' do
 end
 
 RSpec.describe YAML,'#force_erb_in_yaml' do
-  context 'Interprets ERB when option says so' do
-    it 'verifies ERB (String)' do
-      yaml_obj = YAML.ext_load_file 'test_data/erb_in_yaml/config_with_erb.yml', nil, assume_erb: true
+  context 'Use force_erb option on different file names' do
+    it 'proccesses ERB (String) when force_erb is true and file name does not contain "erb"' do
+      yaml_obj = YAML.ext_load_file 'test_data/erb_in_yaml/config_with_erb.yml', nil, force_erb: true
       expect(yaml_obj['erb']).to eql('FooBar')
       expect(yaml_obj['super_erb']).to eql('SuperFoo')
       expect(yaml_obj['different_file_extension_order']).to eql(true)
@@ -299,6 +299,18 @@ RSpec.describe YAML,'#force_erb_in_yaml' do
       expect(yaml_obj['erbse2']).to eql('DoNotRender2')
       expect(yaml_obj['herb']).to eql('DoNotRender3')
       expect(yaml_obj['herbs']).to eql('DoNotRender4')
+    end
+    it 'does not process ERB (String) when force_erb is false and file name does not contain "erb"' do
+      yaml_obj = YAML.ext_load_file 'test_data/erb_in_yaml/config_with_erb.yml', nil, force_erb: false
+      expect(yaml_obj['erb']).not_to eql('FoosBar')
+      expect(yaml_obj['erb']).to eql("<%= 'Foo' + 'Bar' %>")
+      expect(yaml_obj['super_erb']).to eql('SuperFoo')
+      expect(yaml_obj['different_file_extension_order']).to eql(true)
+      expect(yaml_obj['yaml_erb']).to eql('YamlERB')
+      expect(yaml_obj['erbse1']).to eql("<%= 'DoNot' + 'Render1' %>")
+      expect(yaml_obj['erbse2']).to eql("<%= 'DoNot' + 'Render2' %>")
+      expect(yaml_obj['herb']).to eql("<%= 'DoNot' + 'Render3' %>")
+      expect(yaml_obj['herbs']).to eql("<%= 'DoNot' + 'Render4' %>")
     end
   end
 end
