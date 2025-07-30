@@ -224,6 +224,7 @@ YAML.ext_load_file(yaml_path, inheritance_key='extends', options = {})
   - `:extend_existing_arrays` (Boolean) Set to true to extend existing arrays, instead of overwriting them - DEFAULT: true
   - `:merge_nil_values` (Boolean) Set to true to merge nil hash values, overwriting a possibly non-nil value - DEFAULT: false
   - `:merge_debug` (Boolean) Set to true to get console output of merge process for debugging - DEFAULT: false
+  - `:force_erb` (Boolean) Set to true to force ERB processing on all files, even if they do not end with `.erb` - DEFAULT: false
 
 See also rubydoc at [https://www.rubydoc.info/gems/yaml_extend](https://www.rubydoc.info/gems/yaml_extend)
 
