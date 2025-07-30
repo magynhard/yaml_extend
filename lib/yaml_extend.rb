@@ -182,6 +182,7 @@ module YAML
   # Return the value of the corresponding key
   # @param key [String|Array]
   def self.yaml_value_by_key(key, config)
+    return nil if config.nil? # config is nil, if the yaml file is empty
     return config[key] if key.is_a? String
     if valid_key_type? key
       cfg_copy = config.clone
