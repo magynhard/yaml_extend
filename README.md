@@ -230,7 +230,7 @@ See also rubydoc at [https://www.rubydoc.info/gems/yaml_extend](https://www.ruby
 
 
 
-<a name="documentation"></a>
+<a name="contributing"></a>
 ## Contributing
 Bug reports and pull requests are welcome on GitHub at https://github.com/magynhard/yaml_extend. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
