@@ -1,7 +1,7 @@
 # yaml_extend
-[![Gem](https://img.shields.io/gem/v/yaml_extend?color=default&style=plastic&logo=ruby&logoColor=red)](https://rubygems.org/gems/yaml_extend)
-![downloads](https://img.shields.io/gem/dt/yaml_extend?color=blue&style=plastic)
-[![License: MIT](https://img.shields.io/badge/License-MIT-gold.svg?style=plastic&logo=mit)](LICENSE)
+[![Gem](https://img.shields.io/gem/v/yaml_extend?color=gray&style=plastic&logo=ruby&logoColor=white&labelColor=red&label=Gem)](https://rubygems.org/gems/yaml_extend)
+![downloads](https://img.shields.io/gem/dt/yaml_extend?color=blue&style=plastic&label=Downloads&labelColor=beige)
+[![License: MIT](https://img.shields.io/badge/License-MIT-gold.svg?style=plastic&logo=mit&labelColor=beige)](LICENSE)
 
 > Extends YAML to support file based inheritance.
 
